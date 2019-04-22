@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@rmwc/checkbox": "^5.3.1",
+    "@rmwc/fab": "^5.3.1",
     "@rmwc/list": "^5.3.1",
     "@rmwc/typography": "^5.3.1",
     "react": "^16.8.6",
