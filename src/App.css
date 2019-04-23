@@ -4,16 +4,19 @@
   flex-direction: column;
   align-items: center;
 }
-
-.list {
+.tasks-container {
   width: 600px;
   max-width: 100%;
 }
-
-.list-item__text {
-  flex: auto;
+.task {
+  display: flex;
+  align-items: center;
+  margin: 4px 0px 4px 0px;
 }
-
-.list-item__button {
+.task__text {
+  flex: auto;
+  margin-left: 5px;
+}
+.task__button {
   margin: 0px 2px 0px 2px;
 }

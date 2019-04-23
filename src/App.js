@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Typography } from "@rmwc/typography";
 
-import ListContainer from "./ListContainer";
+import TasksContainer from "./TasksContainer";
 import "./App.css";
 import "@material/typography/dist/mdc.typography.css";
 
@@ -10,7 +10,7 @@ class App extends Component {
     return (
       <div className="app">
         <Typography use="headline2">To Do</Typography>
-        <ListContainer />
+        <TasksContainer />
       </div>
     );
   }
