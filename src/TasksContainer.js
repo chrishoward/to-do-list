@@ -1,19 +1,23 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
 import Task from "./Task";
 
 class TasksContainer extends Component {
-  state = {};
-
   render() {
+    const { tasks } = this.props;
     return (
       <div className="tasks-container">
-        {[1, 2, 3].map(key => (
-          <Task key={key} />
-        ))}
+        {tasks.map(task => {
+          return <Task key={task.id} task={task} />;
+        })}
       </div>
     );
   }
 }
 
-export default TasksContainer;
+const mapStateToProps = ({ tasks }) => ({
+  tasks
+});
+
+export default connect(mapStateToProps)(TasksContainer);

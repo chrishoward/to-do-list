@@ -14,7 +14,7 @@ import "@material/line-ripple/dist/mdc.line-ripple.css";
 class Tasks extends Component {
   state = {
     isBeingEdited: false,
-    userEditedInput: "foo"
+    userEditedInput: this.props.task.data.description
   };
 
   editTask = event => {
@@ -31,12 +31,17 @@ class Tasks extends Component {
 
   render() {
     const { isBeingEdited, userEditedInput } = this.state;
+    const { task } = this.props;
+    const {
+      id,
+      data: { description, completed }
+    } = task;
     return (
       <div
         className="task"
         // key={key}
       >
-        <Checkbox checked={true} readOnly />
+        <Checkbox checked={completed} readOnly />
         {isBeingEdited ? (
           <React.Fragment>
             <TextField
@@ -53,7 +58,7 @@ class Tasks extends Component {
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <div className="task__text">Test</div>
+            <div className="task__text">{this.state.userEditedInput}</div>
             <Fab
               className="task__button"
               icon="edit"
