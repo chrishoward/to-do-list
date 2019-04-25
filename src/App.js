@@ -4,7 +4,7 @@ import { Button } from "@rmwc/button";
 import { connect } from "react-redux";
 
 import TasksContainer from "./TasksContainer";
-import { getTasks, addTask } from "./redux/actions";
+import { getTasks, addTask, updateTask, deleteTask } from "./redux/actions";
 
 import "./App.css";
 import "@material/typography/dist/mdc.typography.css";

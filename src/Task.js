@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { Checkbox } from "@rmwc/checkbox";
 import { TextField } from "@rmwc/textfield";
 import { Fab } from "@rmwc/fab";
+import { connect } from "react-redux";
+
+import { updateTask, deleteTask } from "./redux/actions";
 
 import "@material/checkbox/dist/mdc.checkbox.css";
 import "@material/form-field/dist/mdc.form-field.css";
@@ -11,15 +14,20 @@ import "@material/fab/dist/mdc.fab.css";
 import "@material/notched-outline/dist/mdc.notched-outline.css";
 import "@material/line-ripple/dist/mdc.line-ripple.css";
 
-class Tasks extends Component {
+class Task extends Component {
   state = {
     isBeingEdited: false,
-    userEditedInput: this.props.task.data.description
+    task: this.props.task
   };
 
-  editTask = event => {
+  editTask = name => event => {
+    console.log("name: ", name);
+    console.log("etv: ", event.target.checked);
     this.setState({
-      userEditedInput: event.target.value
+      task: {
+        ...this.state.task,
+        [name]: name === "completed" ? event.target.checked : event.target.value
+      }
     });
   };
 
@@ -29,36 +37,50 @@ class Tasks extends Component {
     });
   };
 
+  toggleCompletion = () => {
+    const { updateTask } = this.props;
+    const { task } = this.state;
+    updateTask(task);
+  };
+
+  saveEditedTask = () => {
+    const { updateTask } = this.props;
+    const { task } = this.state;
+    this.toggleEdit();
+    updateTask(task);
+  };
+
   render() {
-    const { isBeingEdited, userEditedInput } = this.state;
-    const { task } = this.props;
-    const {
-      id,
-      data: { description, completed }
-    } = task;
+    const { isBeingEdited, task } = this.state;
+    const { deleteTask } = this.props;
+    const { id, description, completed } = task;
     return (
       <div
         className="task"
         // key={key}
       >
-        <Checkbox checked={completed} readOnly />
+        <Checkbox
+          checked={completed}
+          onClick={this.editTask("completed")}
+          readOnly
+        />
         {isBeingEdited ? (
           <React.Fragment>
             <TextField
               className="task__text"
-              value={userEditedInput}
-              onChange={this.editTask}
+              value={description}
+              onChange={this.editTask("description")}
             />
             <Fab
               className="task__button"
               icon="save"
-              onClick={this.toggleEdit}
+              onClick={this.saveEditedTask}
               mini
             />
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <div className="task__text">{this.state.userEditedInput}</div>
+            <div className="task__text">{description}</div>
             <Fab
               className="task__button"
               icon="edit"
@@ -67,10 +89,23 @@ class Tasks extends Component {
             />
           </React.Fragment>
         )}
-        <Fab className="task__button" icon="delete" mini />
+        <Fab
+          className="task__button"
+          icon="delete"
+          onClick={() => deleteTask(id)}
+          mini
+        />
       </div>
     );
   }
 }
 
-export default Tasks;
+const mapDispatchToProps = {
+  updateTask,
+  deleteTask
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Task);
