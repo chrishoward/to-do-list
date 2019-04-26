@@ -17,6 +17,10 @@
   flex: auto;
   margin-left: 5px;
 }
+.task__text--completed {
+  text-decoration: line-through;
+  color: lightgrey;
+}
 .task__button {
   margin: 0px 2px 0px 2px;
 }
