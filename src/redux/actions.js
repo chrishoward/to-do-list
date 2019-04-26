@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const apiUrl = "http://13.236.116.224:4000";
-const apiUrl = "http://localhost:4000";
+const apiUrl = "http://13.236.116.224:4000";
+// const apiUrl = "http://localhost:4000";
 const newTask = {
   description: "",
   completed: false

@@ -16,18 +16,34 @@ import "@material/line-ripple/dist/mdc.line-ripple.css";
 
 class Task extends Component {
   state = {
+    id: this.props.id,
+    description: this.props.description,
+    completed: this.props.completed,
     isBeingEdited: false,
-    task: this.props.task
+    userEditedDescription: this.props.description
   };
 
+  shouldComponentUpdate(nextProps) {
+    if (nextProps !== this.props) {
+      return false;
+    }
+    return true;
+  }
+
+  componentDidUpdate(prevState) {
+    if (
+      this.state.description !== prevState.description ||
+      this.state.completed !== prevState.completed
+    ) {
+      const { updateTask } = this.props;
+      const { isBeingEdited, userEditedDescription, ...task } = this.state;
+      updateTask(task);
+    }
+  }
+
   editTask = name => event => {
-    console.log("name: ", name);
-    console.log("etv: ", event.target.checked);
     this.setState({
-      task: {
-        ...this.state.task,
-        [name]: name === "completed" ? event.target.checked : event.target.value
-      }
+      [name]: name === "completed" ? event.target.checked : event.target.value
     });
   };
 
@@ -37,28 +53,22 @@ class Task extends Component {
     });
   };
 
-  toggleCompletion = () => {
-    const { updateTask } = this.props;
-    const { task } = this.state;
-    updateTask(task);
-  };
-
   saveEditedTask = () => {
-    const { updateTask } = this.props;
-    const { task } = this.state;
     this.toggleEdit();
-    updateTask(task);
+    this.setState({ description: this.state.userEditedDescription });
   };
 
   render() {
-    const { isBeingEdited, task } = this.state;
     const { deleteTask } = this.props;
-    const { id, description, completed } = task;
+    const {
+      id,
+      description,
+      completed,
+      isBeingEdited,
+      userEditedDescription
+    } = this.state;
     return (
-      <div
-        className="task"
-        // key={key}
-      >
+      <div className="task">
         <Checkbox
           checked={completed}
           onClick={this.editTask("completed")}
@@ -68,8 +78,8 @@ class Task extends Component {
           <React.Fragment>
             <TextField
               className="task__text"
-              value={description}
-              onChange={this.editTask("description")}
+              value={userEditedDescription}
+              onChange={this.editTask("userEditedDescription")}
             />
             <Fab
               className="task__button"
@@ -80,7 +90,13 @@ class Task extends Component {
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <div className="task__text">{description}</div>
+            <div
+              className={`task__text ${
+                completed ? "task__text--completed" : ""
+              }`}
+            >
+              {description}
+            </div>
             <Fab
               className="task__button"
               icon="edit"
